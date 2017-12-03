@@ -1,2 +1,80 @@
 # SharePoint-Reference
 A reference document for SharePoint
+Nick Kirkpatrick http://cvramen.com
+
+
+This is how you prevent the Edit Page feature from appearing in a page and when it is being viewed in a SharePoint dialog.
+Make sure the below .CSS code is in the below tag.
+##########
+<asp:Content ContentPlaceHolderId="PlaceHolderTitleAreaClass" runat="server">
+	<style type="text/css">
+	Div.ms-titleareaframe {
+	height: 100%;
+	}
+	.ms-pagetitleareaframe table {
+	background: none;
+	}
+			.ms-cui-tt-span {
+	display:none;
+	}
+		.ms-cui-tt.ms-browseTab.ms-cui-tt-s {
+	display:none;
+	}
+  </style>
+</asp:Content>
+##########
+
+------------------
+How to create a SharePoint dialog with parameters.
+
+Add this in the onmouseover or onclick attribute of an HTML element:
+##########
+onmouseover="var options = SP.UI.$create_DialogOptions();options.title = 'My Dialog Title';options.width = 550;options.height = 560;options.url ='http://sharepointtestsite/example.aspx';options.x = 12;options.y =400;SP.UI.ModalDialog.showModalDialog(options);"
+##########
+
+Add this in the href attribute of an anchor tag:
+##########
+<a href="javascript:var options = SP.UI.$create_DialogOptions();options.title = 'My Dialog Title';options.width = 550;options.height = 560;options.url ='http://sharepointtestsite/example.aspx';options.x = 12;options.y =400;SP.UI.ModalDialog.showModalDialog(options);">Stuff in the link</a>
+##########
+
+These are the properties you can set:
+
+width: width of dialog
+height: height of dialog
+url: url of page to be displayed through dialog
+x: x offset of dialog (horizontal)
+y: y offset of dialog (vertical)
+title: what appears in the title bar of dialog
+
+
+How to display a page with a separate URL inside a SharePoint dialog.
+
+Add this in the onmouseover or onclick attribute of an HTML element:
+##########
+<a onclick="OpenPopUpPage('https://mysharepointsite.org/brunswick/es/SitePages/Forms/AllPages.aspx', RefreshPage, width = 700); return false;" href="" class="T2">Example</a>
+##########
+
+##########
+<a onclick="var options = {url: 'https://mysharepointsite.org/brunswick/es/SitePages/Forms/AllPages.aspx', width: 710, height: 300, title: 'Hi World', x: 500, y: 800}; SP.UI.ModalDialog.showModalDialog(options);" href="#" class="T2">Example</a>
+##########
+------------------
+How to run code that has to be delayed to make certain that the SharePoint page has finished loading before you start modifying its contents, and to accomodate for the other JavaScript that is running:
+##########
+<script type="text/javascript">
+$(window).bind("load", function() {
+	setTimeout(function()
+	{
+		//what you want to do
+	}, 3100);
+});
+</script>
+##########
+------------------
+Get rid of hyperlinks of email address in SharePoint lists:
+##########
+$(document).ready(function() {
+	$("td a:contains('@')").each(function() {		
+		$(this).contents().unwrap();
+	});
+});
+##########
